@@ -33,3 +33,11 @@ This requires no change in the config, it's the default.
 To disable keep alives in the server, set ENV `SERVER_DISABLE_KEEP_ALIVES` to `true`. In this case the client will send keep alives.
 
 ![Keep alive active and done by the client](./assets/keep-alive-by-client.png)
+
+## Docker images
+
+only arch64 images are available at the moment
+```
+dariomader/long-live-connection-server:v0.0.1
+dariomader/long-live-connection-client:v0.0.1
+```
