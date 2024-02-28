@@ -1,6 +1,6 @@
 # long-live-conn
 
-Is a repository that contains a client and server written in Golang that can maintain a long-lived HTTP2 connection. The following variables are confiuurable in the server and client through ENV variables:
+Is a repository that contains a client and server written in Golang that can maintain a long-lived HTTP2 connection. The following variables are configurable in the server and client through ENV variables:
 
 ## Client
 
@@ -36,7 +36,8 @@ To disable keep alives in the server, set ENV `SERVER_DISABLE_KEEP_ALIVES` to `t
 
 ## Docker images
 
-only arch64 images are available at the moment
+Only arch64 images are available at the moment
+
 ```
 dariomader/long-live-connection-server:v0.0.1
 dariomader/long-live-connection-client:v0.0.1
