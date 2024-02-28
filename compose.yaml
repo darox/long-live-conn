@@ -1,0 +1,17 @@
+services:
+  server:
+    build: server/
+    ports:
+      - "8080:8080"
+    volumes:
+    - ./server/key.pem:/server/key.pem
+    - ./server/cert.pem:/server/cert.pem
+    environment:
+      - SERVER_TLS_CERT_PATH=/server/cert.pem
+      - SERVER_TLS_KEY_PATH=/server/key.pem
+  client: 
+    build: client/
+    depends_on:
+      - server
+    environment:
+      - CLIENT_SERVER_URL=https://server:8080
