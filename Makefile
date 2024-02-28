@@ -8,6 +8,6 @@ local-up: certs
 	docker-compose -f compose.yaml up --build
 
 build:
-	cd client && docker build -t docker.io/long-live-connection/client .
-	cd server && docker build -t docker.io/long-live-connection/server .
+	cd client && docker build -t dariomader/long-live-connection-client:v0.0.1 .
+	cd server && docker build -t dariomader/long-live-connection-server:v0.0.1 .
   
