@@ -30,9 +30,7 @@ func (ln tcpKeepAliveListener) Accept() (net.Conn, error) {
 		return nil, err
 	}
 
-	if ln.keepAliveIntervalSeconds != -1 {
-		err = conn.SetKeepAlivePeriod(time.Duration(ln.keepAliveIntervalSeconds) * time.Second)
-	}
+	err = conn.SetKeepAlivePeriod(time.Duration(ln.keepAliveIntervalSeconds) * time.Second)
 
 	if err != nil {
 		return nil, err
@@ -77,7 +75,7 @@ func runServer(c serverConfig) error {
 }
 
 func setupServerConfig() serverConfig {
-	viper.SetDefault("SERVER_KEEP_ALIVE_INTERVAL_SECONDS", -1)
+	viper.SetDefault("SERVER_KEEP_ALIVE_INTERVAL_SECONDS", 15)
 	viper.SetDefault("SERVER_KEEP_ALIVE_ENABLED", true)
 	viper.SetDefault("SERVER_LISTEN_ADDRESS", ":8080")
 	viper.SetDefault("SERVER_TLS_CERT_PATH", "cert.pem")
