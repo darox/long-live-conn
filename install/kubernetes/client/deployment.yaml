@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: long-live-conn-client
+  labels:
+    app: long-live-conn
+    component: client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: long-live-conn
+      component: client
+  template:
+    metadata: 
+      labels:
+        app: long-live-conn
+        component: client
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+      containers:
+        - name: client
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            privileged: false
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL  
+          image: dariomader/long-live-connection-client:v0.0.2
+          imagePullPolicy: Always
+          env:
+            - name: "CLIENT_KEEP_ALIVE_ENABLED"
+              value: "true"
+            - name: "CLIENT_KEEP_ALIVE_INTERVAL_SECONDS"
+              value: "15"
+            - name: "CLIENT_TLS_DISABLE_VERIFICATION"
+              value: "true"
+            - name: "CLIENT_REQUEST_INTERVAL_SECONDS"
+              value: "30"
+            - name: "CLIENT_SERVER_URL"
+              value: "https://long-live-conn-server:8080"
