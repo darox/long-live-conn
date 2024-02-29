@@ -6,16 +6,23 @@ local-up: certs
 	docker-compose rm -f
 	docker-compose -f compose.yaml up --build
 
-build-server:
-	cd server && docker buildx build -t dariomader/long-live-connection-server --platform linux/amd64,linux/arm64 .
 
-build-client: 
-	cd client && docker buildx build -t dariomader/long-live-connection-client --platform linux/amd64,linux/arm64 .
+release: 
+	@read -p "Are you sure you want to continue releasing a new image? [y/N] " answer; \
+	if [ "$$answer" != "y" ]; then \
+		exit 1; \
+	fi
+	cd client && docker buildx build --platform linux/amd64,linux/arm64 -t dariomader/long-live-connection-client:v0.0.2 --push .
+	cd server && docker buildx build --platform linux/amd64,linux/arm64 -t dariomader/long-live-connection-server:v0.0.2 --push .
 
-release: release-server release-client
+k8s-clean:
+	kubectl delete secret long-live-conn-server-certs --ignore-not-found=true
+	kubectl delete -f install/kubernetes/server --ignore-not-found=true
+	kubectl delete -f install/kubernetes/client --ignore-not-found=true
 
-release-server: build-server
-	cd server && docker buildx build -t dariomader/long-live-connection-server:v0.0.2 --platform linux/amd64,linux/arm64 --push .
-
-release-client: build-client
-	cd server && docker buildx build -t dariomader/long-live-connection-server:v0.0.2 --platform linux/amd64,linux/arm64 --push .
+k8s-up: k8s-clean certs
+	kubectl create secret tls long-live-conn-server-certs \
+    --cert=server/cert.pem \
+    --key=server/key.pem
+	kubectl apply -f install/kubernetes/server
+	kubectl apply -f install/kubernetes/client

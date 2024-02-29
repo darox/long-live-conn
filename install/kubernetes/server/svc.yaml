@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: long-live-conn-server
+  labels:
+    app: long-live-conn
+    component: server
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: https
+      protocol: TCP
+      name: https
+  selector:
+    app: long-live-conn
+    component: server

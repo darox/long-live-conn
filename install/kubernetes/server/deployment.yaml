@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: long-live-conn-server
+  labels:
+    app: long-live-conn
+    component: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: long-live-conn
+      component: server
+  template:
+    metadata: 
+      labels:
+        app: long-live-conn
+        component: server
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+      containers:
+        - name: server
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            privileged: false
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL  
+          image: dariomader/long-live-connection-server:v0.0.2
+          imagePullPolicy: Always
+          env:
+            - name: "SERVER_KEEP_ALIVE_ENABLED"
+              value: "true"
+            - name: "SERVER_KEEP_ALIVE_INTERVAL_SECONDS"
+              value: "15"
+            - name: "SERVER_TLS_CERT_PATH"
+              value: "/server/secrets/tls.crt"
+            - name: "SERVER_TLS_KEY_PATH"
+              value: "/server/secrets/tls.key"
+          ports:
+            - name: https
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: https
+              scheme: HTTPS
+          readinessProbe:
+            httpGet:
+              path: /
+              port: https
+              scheme: HTTPS
+          volumeMounts:
+            - name: long-live-conn-server-certs
+              mountPath: /server/secrets
+              readOnly: true
+      volumes:
+        - name: long-live-conn-server-certs
+          secret:
+            secretName: long-live-conn-server-certs
