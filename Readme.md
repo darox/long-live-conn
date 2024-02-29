@@ -61,3 +61,4 @@ packet directly after sending the HTTP request. In this case the client will not
 To disable keep alives in the server, set ENV `SERVER_KEEP_ALIVE_ENABLED` to `false`. In this case the client will send keep alives.
 
 ![Keep alive active and done by the client](./assets/keep-alive-by-client.png)
+

@@ -2,10 +2,10 @@ certs:
 	openssl req -x509 -newkey rsa:4096 -nodes -keyout server/key.pem -out server/cert.pem -days 365 \
     -subj "/C=CH/ST=Berne/L=Berne/O=long-live-connection/OU=developers/CN=server"
 
-
 local-up: certs
 	docker-compose rm -f
 	docker-compose -f compose.yaml up --build
+
 
 release: 
 	@read -p "Are you sure you want to continue releasing a new image? [y/N] " answer; \
@@ -26,6 +26,3 @@ k8s-up: k8s-clean certs
     --key=server/key.pem
 	kubectl apply -f install/kubernetes/server
 	kubectl apply -f install/kubernetes/client
-
-  
-  
