@@ -30,8 +30,8 @@ func setupClient(c clientConfig) (http.Client, error) {
 
 	// Create a custom http.Transport with the custom dialer
 	tr := &http.Transport{
-		DisableKeepAlives: c.disableKeepAlives,
-		TLSClientConfig:   &tls.Config{InsecureSkipVerify: c.disableTLSVerification},
+		DisableKeepAlives: !c.keepAliveEnabled,
+		TLSClientConfig:   &tls.Config{InsecureSkipVerify: c.tlsDisableVerification},
 		DialContext:       dialer.DialContext, // Use the custom dialer for the keep alive settings
 	}
 
@@ -51,8 +51,8 @@ func setupClient(c clientConfig) (http.Client, error) {
 
 func setupClientConfig() clientConfig {
 	viper.SetDefault("CLIENT_KEEP_ALIVE_SECONDS", 15) // 15 is the net dialer default
-	viper.SetDefault("CLIENT_DISABLE_KEEP_ALIVES", false)
-	viper.SetDefault("CLIENT_DISABLE_TLS_VERIFICATION", true)
+	viper.SetDefault("CLIENT_KEEP_ALIVE_ENABLED", true)
+	viper.SetDefault("CLIENT_TLS_DISABLE_VERIFICATION", true)
 	viper.SetDefault("CLIENT_REQUEST_INTERVAL_SECONDS", 30)
 	viper.SetDefault("CLIENT_SERVER_URL", "https://localhost:8080")
 
@@ -60,8 +60,8 @@ func setupClientConfig() clientConfig {
 
 	return clientConfig{
 		keepAliveSeconds:       viper.GetFloat64("CLIENT_KEEP_ALIVE_SECONDS"),
-		disableKeepAlives:      viper.GetBool("CLIENT_DISABLE_KEEP_ALIVES"),
-		disableTLSVerification: viper.GetBool("CLIENT_DISABLE_TLS_VERIFICATION"),
+		keepAliveEnabled:       viper.GetBool("CLIENT_KEEP_ALIVE_ENABLED"),
+		tlsDisableVerification: viper.GetBool("CLIENT_TLS_DISABLE_VERIFICATION"),
 		RequestIntervalSeconds: viper.GetFloat64("CLIENT_REQUEST_INTERVAL_SECONDS"),
 		serverURL:              viper.GetString("CLIENT_SERVER_URL"),
 	}
@@ -69,8 +69,8 @@ func setupClientConfig() clientConfig {
 
 type clientConfig struct {
 	keepAliveSeconds       float64
-	disableKeepAlives      bool
-	disableTLSVerification bool
+	keepAliveEnabled       bool
+	tlsDisableVerification bool
 	RequestIntervalSeconds float64
 	serverURL              string
 }
