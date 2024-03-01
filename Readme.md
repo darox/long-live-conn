@@ -24,7 +24,7 @@ This repo includes k8s manifests under the `install/kubernetes` directory. Use t
 
 ### Client
 
-- CLIENT_KEEP_ALIVE_SECONDS - The interval in seconds between keep alives. Default is `15` by the net/dialer package.
+- CLIENT_KEEP_ALIVE_INTERVAL_SECONDS - The interval in seconds between keep alives. Default is `15` by the net/dialer package.
 - CLIENT_KEEP_ALIVE_ENABLED - Enables keep alives in the client. If the server has keep alives enabled, the client will not send keep alives. Default is `true`
 - CLIENT_TLS_DISABLE_VERIFICATION - Disables TLS verification. Default is `true`
 - CLIENT_REQUEST_INTERVAL_SECONDS - The interval in seconds between requests. Default is `30` seconds

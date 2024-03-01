@@ -25,7 +25,7 @@ func doRequest(client *http.Client, c clientConfig) (httpStatus, error) {
 
 func setupClient(c clientConfig) (http.Client, error) {
 	dialer := &net.Dialer{
-		KeepAlive: time.Duration(c.keepAliveSeconds) * time.Second,
+		KeepAlive: time.Duration(c.keepAliveIntervalSeconds) * time.Second,
 	}
 
 	// Create a custom http.Transport with the custom dialer
@@ -50,7 +50,7 @@ func setupClient(c clientConfig) (http.Client, error) {
 }
 
 func setupClientConfig() clientConfig {
-	viper.SetDefault("CLIENT_KEEP_ALIVE_SECONDS", 15) // 15 is the net dialer default
+	viper.SetDefault("CLIENT_KEEP_ALIVE_INTERVAL_SECONDS", 15) // 15 is the net dialer default
 	viper.SetDefault("CLIENT_KEEP_ALIVE_ENABLED", true)
 	viper.SetDefault("CLIENT_TLS_DISABLE_VERIFICATION", true)
 	viper.SetDefault("CLIENT_REQUEST_INTERVAL_SECONDS", 30)
@@ -59,20 +59,20 @@ func setupClientConfig() clientConfig {
 	viper.AutomaticEnv()
 
 	return clientConfig{
-		keepAliveSeconds:       viper.GetFloat64("CLIENT_KEEP_ALIVE_SECONDS"),
-		keepAliveEnabled:       viper.GetBool("CLIENT_KEEP_ALIVE_ENABLED"),
-		tlsDisableVerification: viper.GetBool("CLIENT_TLS_DISABLE_VERIFICATION"),
-		RequestIntervalSeconds: viper.GetFloat64("CLIENT_REQUEST_INTERVAL_SECONDS"),
-		serverURL:              viper.GetString("CLIENT_SERVER_URL"),
+		keepAliveIntervalSeconds: viper.GetFloat64("CLIENT_KEEP_ALIVE_INTERVAL_SECONDS"),
+		keepAliveEnabled:         viper.GetBool("CLIENT_KEEP_ALIVE_ENABLED"),
+		tlsDisableVerification:   viper.GetBool("CLIENT_TLS_DISABLE_VERIFICATION"),
+		RequestIntervalSeconds:   viper.GetFloat64("CLIENT_REQUEST_INTERVAL_SECONDS"),
+		serverURL:                viper.GetString("CLIENT_SERVER_URL"),
 	}
 }
 
 type clientConfig struct {
-	keepAliveSeconds       float64
-	keepAliveEnabled       bool
-	tlsDisableVerification bool
-	RequestIntervalSeconds float64
-	serverURL              string
+	keepAliveIntervalSeconds float64
+	keepAliveEnabled         bool
+	tlsDisableVerification   bool
+	RequestIntervalSeconds   float64
+	serverURL                string
 }
 
 type httpStatus string
