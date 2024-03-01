@@ -12,8 +12,8 @@ release:
 	if [ "$$answer" != "y" ]; then \
 		exit 1; \
 	fi
-	cd client && docker buildx build --platform linux/amd64,linux/arm64 -t dariomader/long-live-connection-client:v0.0.2 --push .
-	cd server && docker buildx build --platform linux/amd64,linux/arm64 -t dariomader/long-live-connection-server:v0.0.2 --push .
+	cd client && docker buildx build --platform linux/amd64,linux/arm64 -t dariomader/long-live-connection-client:v0.0.3 --push .
+	cd server && docker buildx build --platform linux/amd64,linux/arm64 -t dariomader/long-live-connection-server:v0.0.3 --push .
 
 k8s-clean:
 	kubectl delete secret long-live-conn-server-certs --ignore-not-found=true
