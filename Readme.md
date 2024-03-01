@@ -13,8 +13,8 @@ This repo includes a docker-compose file that can be used to deploy the server a
 The images are available on Docker Hub:
 
 ```
-dariomader/long-live-connection-server:v0.0.2
-dariomader/long-live-connection-client:v0.0.2
+dariomader/long-live-connection-server:v0.0.3
+dariomader/long-live-connection-client:v0.0.3
 ```
 
 ### Kubernetes
